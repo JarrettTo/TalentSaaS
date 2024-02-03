@@ -1,0 +1,49 @@
+name: Build and deploy jnr app
+
+on:
+  push:
+    branches:
+      - main
+      - development
+  workflow_dispatch:
+
+env:
+  LOKI_USR: ${{ secrets.LOKI_USR }}
+  LOKI_PSW: ${{ secrets.LOKI_PWD }}
+
+jobs:
+  deploy-production:
+    name: Deploy production
+    runs-on: self-hosted
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Prepare production envs
+        run: |
+          echo 'DOMAIN=app.neuralle.com' >> .env.production
+          echo LOKI_USR=$LOKI_USR >> .env.production
+          echo LOKI_PSW=$LOKI_PSW >> .env.production
+
+      - name: Start docker compose
+        run: |
+          COMPOSE_PROJECT_NAME=jnr-production docker compose -f docker-compose.prod.yml --env-file .env.production up -d --build
+
+  deploy-development:
+    name: Deploy development
+    runs-on: self-hosted
+    if: github.ref == 'refs/heads/development'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Prepare development envs
+        run: |
+          echo 'DOMAIN=devapp.neuralle.com' >> .env.development
+          echo LOKI_USR=$LOKI_USR >> .env.development
+          echo LOKI_PSW=$LOKI_PSW >> .env.development
+
+      - name: Start docker compose
+        run: |
+          COMPOSE_PROJECT_NAME=jnr-development docker compose -f docker-compose.dev.yml --env-file .env.development up -d --build

@@ -1,0 +1,6 @@
+export * from './ui/header.component'
+export * from './ui/hero.component'
+export * from './ui/about.component'
+export * from './ui/core-team.component'
+export * from './ui/roster.component'
+export * from './ui/footer.component'

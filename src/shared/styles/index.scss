@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import-normalize;
+
+@import "./fonts.scss";
+@import "./constants.scss";
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+
+  @media (max-width: 1441px) {
+    font-size: 1.12vw;
+  }
+}
+
+body {
+  margin: 0;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  background-color: #C4D1FF;
+}
+
+:root {
+  font-family: "CabinetGrotesk", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  color-scheme: light dark;
+  color: var(--primary-text-color);
+  background-color: var(--bg-color);
+}
+
+a.active[aria-current="page"] {
+  text-decoration: underline;
+  text-decoration-color: #F77333;
+}
+
+
+input.mantine-Checkbox-input {
+  cursor: pointer;
+}
+
+.mantine-Tabs-tabLabel {
+  font-family: "CabinetGrotesk", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.mantine-Select-dropdown,
+.mantine-MultiSelect-dropdown {
+  font-weight: 900;
+}

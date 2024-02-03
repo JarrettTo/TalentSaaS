@@ -1,0 +1,31 @@
+version: "3.9"
+x-logging: &logging
+  logging:
+    driver: loki
+    options:
+      loki-url: "https://${LOKI_USR}:${LOKI_PSW}@loki.unistory.app/loki/api/v1/push"
+      loki-external-labels: "type=prod,repo=${COMPOSE_PROJECT_NAME},job=docker,container_name={{.Name}}"
+
+services:
+  frontend:
+    <<: *logging
+    build:
+      context: .
+      args:
+        - build_env=production
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend-prod.entrypoints=websecure"
+      - "traefik.http.routers.frontend-prod.rule=Host(`${DOMAIN}`) && PathPrefix(`/`)"
+      - "traefik.http.routers.frontend-prod.tls.certresolver=le"
+      - "traefik.http.routers.frontend-prod.tls=true"
+    networks:
+      - default
+      - proxy
+
+networks:
+  default:
+    name: ${COMPOSE_PROJECT_NAME}
+  proxy:
+    name: traefik
+    external: true
